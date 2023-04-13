@@ -70,8 +70,12 @@ class UrlStore:
 
         # don't use the following on Windows
         if not sys.platform.startswith("win"):
-            signal.signal(signal.SIGINT, dump_unvisited_urls)
-            signal.signal(signal.SIGTERM, dump_unvisited_urls)
+            try:
+                dump_unvisited_urls()
+                signal.signal(signal.SIGINT, dump_unvisited_urls)
+                signal.signal(signal.SIGTERM, dump_unvisited_urls)
+            except Exception:
+                pass
 
     def _buffer_urls(
         self, data: List[str], visited: bool = False
